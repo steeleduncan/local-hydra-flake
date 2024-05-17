@@ -15,6 +15,8 @@ echo "unix_socket_directories = '$Lockfiles'" >> $Conf
 
 # todo grab pid to quit later
 postgres -D $Db&
+PostgresPid=$!
+echo "Postgres started with pid: $PostgresPid"
 
 # todo wait and supply pwd
 # https://github.com/NixOS/hydra/blob/master/doc/manual/src/installation.md
@@ -27,5 +29,24 @@ hydra-init
 
 # todo grab pid to quit later
 hydra-server&
+HydraPid=$!
+echo "Hydra started with pid: $HydraPid"
+
 hydra-evaluator&
-hydra-queue-runner
+EvaluatorPid=$!
+echo "Evaluator started with pid: $EvaluatorPid"
+
+hydra-queue-runner&
+RunnerPid=$!
+echo "Runner started with pid: $RunnerPid"
+
+function cleanup() {
+    kill $PostgresPid
+    kill $HydraPid
+    kill $RunnerPid
+    kill $EvaluatorPid
+}
+trap cleanup INT
+
+sleep 10
+cleanup
