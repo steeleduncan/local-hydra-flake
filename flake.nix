@@ -1,4 +1,5 @@
 # https://github.com/NixOS/hydra/issues/682
+# https://gist.github.com/jvolkman/6e61c52d953677f66f32d8f77b157e61
 {
   description = "Local hydra";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
